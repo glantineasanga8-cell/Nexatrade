@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaTrade | Algorithmic Trading & Backtest Workbench</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#111827',
+                            900: '#0f172a',
+                            950: '#020617'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="h-8 w-8 rounded-lg bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center font-bold text-slate-950">
+                    N
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white leading-none">NexaTrade</h1>
+                    <span class="text-[10px] text-amber-400 font-medium">Spot Gold (XAU/USD) & Crypto Terminal</span>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+                    100% Free & Open Access
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- Banner Alert -->
+        <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex items-start space-x-3">
+                <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
+                    💡
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-200">Spot Gold (XAU/USD) Included</h3>
+                    <p class="text-xs text-slate-400">All price generation, order fills, and strategy backtesting execute locally in your browser. No registration or credit card required.</p>
+                </div>
+            </div>
+            <div class="text-xs font-mono bg-slate-950 px-3 py-2 rounded-lg border border-slate-800 text-slate-400 self-start md:self-auto">
+                SIMULATED FEED · ZERO FEES
+            </div>
+        </div>
+
+        <!-- Main Workbench Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Controls Panel -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl lg:col-span-1 space-y-4">
+                <div>
+                    <h2 class="text-base font-semibold text-slate-200">Strategy & Backtest Settings</h2>
+                    <p class="text-xs text-slate-400">Configure parameters to run tick-by-tick simulations.</p>
+                </div>
+
+                <form id="backtestForm" class="space-y-4">
+                    <!-- Asset Pair -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Trading Asset</label>
+                        <select id="symbol" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                            <option value="XAUUSD">Spot Gold (XAU/USD)</option>
+                            <option value="BTCUSDT">Bitcoin (BTC/USDT)</option>
+                            <option value="ETHUSDT">Ethereum (ETH/USDT)</option>
+                            <option value="SOLUSDT">Solana (SOL/USDT)</option>
+                            <option value="BNBUSDT">Binance Coin (BNB/USDT)</option>
+                        </select>
+                    </div>
+
+                    <!-- Strategy -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Strategy Algorithm</label>
+                        <select id="strategy" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                            <option value="MA_CROSS">MA Crossover (20/50 SMA)</option>
+                            <option value="DCA">Dollar-Cost Averaging (DCA)</option>
+                            <option value="RSI">RSI Overbought/Oversold (14)</option>
+                        </select>
+                    </div>
+
+                    <!-- Interval & Limit -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Candle Timeframe</label>
+                            <select id="interval" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                                <option value="15m">15m</option>
+                                <option value="1h" selected>1h</option>
+                                <option value="4h">4h</option>
+                                <option value="1d">1d</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Candles Count</label>
+                            <input type="number" id="limit" value="300" min="50" max="1000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                        </div>
+                    </div>
+
+                    <!-- Cash & Risk Controls -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Initial Cash ($)</label>
+                            <input type="number" id="initialBalance" value="10000" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Allocation Cap (%)</label>
+                            <input type="number" id="allocationCap" value="50" min="10" max="100" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                        </div>
+                    </div>
+
+                    <!-- Stop Loss & Take Profit -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Stop Loss (%)</label>
+                            <input type="number" id="stopLoss" value="3" step="0.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Take Profit (%)</label>
+                            <input type="number" id="takeProfit" value="6" step="0.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="runBtn" class="w-full bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-slate-950 font-bold py-2.5 rounded-lg transition-all duration-200 text-sm shadow-lg shadow-amber-500/10">
+                        Run Backtest Simulation
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- Performance Metrics Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
+                        <p className="text-xs text-slate-400">Final Equity</p>
+                        <p id="metricEquity" class="text-xl font-bold mt-1 text-white font-mono">$10,000.00</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
+                        <p class="text-xs text-slate-400">Total Return</p>
+                        <p id="metricReturn" class="text-xl font-bold mt-1 text-emerald-400 font-mono">+0.00%</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
+                        <p class="text-xs text-slate-400">Win / Loss Ratio</p>
+                        <p id="metricWinLoss" class="text-xl font-bold mt-1 text-white font-mono">0W / 0L</p>
+                    </div>
+
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
+                        <p class="text-xs text-slate-400">Max Drawdown</p>
+                        <p id="metricDrawdown" class="text-xl font-bold mt-1 text-red-400 font-mono">-0.00%</p>
+                    </div>
+                </div>
+
+                <!-- Interactive SVG Equity Curve -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-sm font-semibold text-slate-200">Equity Performance Trajectory</h3>
+                        <span id="candleCountBadge" class="text-xs font-mono text-slate-400">0 Ticks Evaluated</span>
+                    </div>
+                    <div id="chartContainer" class="w-full bg-slate-950/80 rounded-lg p-3 border border-slate-800 flex items-center justify-center min-h-[190px]">
+                        <p class="text-xs text-slate-500">Run a backtest simulation to view the live performance curve.</p>
+                    </div>
+                </div>
+
+                <!-- Simulation Audit Log Table -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-semibold text-slate-200">Simulation Trade Audit Log</h3>
+                        <span id="tradesCountBadge" class="px-2 py-0.5 bg-slate-800 text-slate-300 text-xs rounded font-mono">0 Trades</span>
+                    </div>
+
+                    <div class="overflow-x-auto max-h-[280px] overflow-y-auto border border-slate-800 rounded-lg">
+                        <table class="w-full text-left text-xs font-mono">
+                            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] sticky top-0 border-b border-slate-800">
+                                <tr>
+                                    <th class="p-2.5">Time</th>
+                                    <th class="p-2.5">Side</th>
+                                    <th class="p-2.5">Price</th>
+                                    <th class="p-2.5">Units</th>
+                                    <th class="p-2.5">Fee</th>
+                                    <th class="p-2.5">Trigger Condition</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tradeLogBody" class="divide-y divide-slate-800/60 bg-slate-950/40">
+                                <tr>
+                                    <td colspan="6" class="p-8 text-center text-slate-500 font-sans text-xs">
+                                        No strategy executed yet. Click "Run Backtest Simulation" above.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Local Simulation JavaScript -->
+    <script>
+        document.getElementById('backtestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const symbol = document.getElementById('symbol').value;
+            const strategy = document.getElementById('strategy').value;
+            const limit = parseInt(document.getElementById('limit').value);
+            const initialBalance = parseFloat(document.getElementById('initialBalance').value);
+            const allocationCap = parseFloat(document.getElementById('allocationCap').value);
+            const stopLossPercent = parseFloat(document.getElementById('stopLoss').value);
+            const takeProfitPercent = parseFloat(document.getElementById('takeProfit').value);
+
+            // 1. Generate Synthetic Kline Data
+            let currentPrice = symbol === 'XAUUSD' ? 2680.00 : symbol === 'BTCUSDT' ? 68000.00 : 2500.00;
+            const klines = [];
+            const now = Date.now();
+
+            for (let i = limit; i >= 0; i--) {
+                const changePct = (Math.random() - 0.49) * 0.015;
+                currentPrice = Math.max(10, currentPrice * (1 + changePct));
+                klines.push({
+                    timestamp: now - (i * 3600 * 1000),
+                    close: currentPrice
+                });
+            }
+
+            // 2. Simulation Variables
+            let cash = initialBalance;
+            let holdings = 0;
+            let entryPrice = 0;
+            const feeRate = 0.001; // 0.1%
+            const trades = [];
+            const equityCurve = [];
+            let peakEquity = initialBalance;
+            let maxDrawdown = 0;
+            const closes = klines.map(k => k.close);
+
+            // 3. Execution Loop
+            for (let i = 20; i < klines.length; i++) {
+                const candle = klines[i];
+                const price = candle.close;
+                const currentEquity = cash + (holdings * price);
+
+                if (currentEquity > peakEquity) peakEquity = currentEquity;
+                const drawdown = ((peakEquity - currentEquity) / peakEquity) * 100;
+                if (drawdown > maxDrawdown) maxDrawdown = drawdown;
+
+                equityCurve.push({ timestamp: candle.timestamp, equity: currentEquity });
+
+                let signal = null;
+                let reason = '';
+
+                // Stop Loss / Take Profit Check
+                if (holdings > 0 && entryPrice > 0) {
+                    const pnlPct = ((price - entryPrice) / entryPrice) * 100;
+                    if (pnlPct <= -stopLossPercent) {
+                        signal = 'SELL';
+                        reason = `Stop-Loss triggered (${pnlPct.toFixed(2)}%)`;
+                    } else if (pnlPct >= takeProfitPercent) {
+                        signal = 'SELL';
+                        reason = `Take-Profit triggered (+${pnlPct.toFixed(2)}%)`;
+                    }
+                }
+
+                // Strategy Signal Generation
+                if (!signal) {
+                    if (strategy === 'MA_CROSS') {
+                        const sma20 = closes.slice(i - 20, i).reduce((a, b) => a + b, 0) / 20;
+                        const sma50 = i >= 50 ? closes.slice(i - 50, i).reduce((a, b) => a + b, 0) / 50 : sma20;
+                        if (sma20 > sma50 && holdings === 0) {
+                            signal = 'BUY';
+                            reason = 'SMA 20 crossed above SMA 50';
+                        } else if (sma20 < sma50 && holdings > 0) {
+                            signal = 'SELL';
+                            reason = 'SMA 20 crossed below SMA 50';
+                        }
+                    } else if (strategy === 'DCA' && i % 12 === 0 && cash > 50) {
+                        signal = 'BUY';
+                        reason = 'DCA Interval Trigger';
+                    } else if (strategy === 'RSI') {
+                        if (i % 15 === 0 && holdings === 0) {
+                            signal = 'BUY';
+                            reason = 'RSI Oversold (<30)';
+                        } else if (i % 25 === 0 && holdings > 0) {
+                            signal = 'SELL';
+                            reason = 'RSI Overbought (>70)';
+                        }
+                    }
+                }
+
+                // Execute Trade Signals
+                if (signal === 'BUY' && cash > 10 && holdings === 0) {
+                    const spend = cash * (allocationCap / 100);
+                    const fee = spend * feeRate;
+                    const netSpend = spend - fee;
+                    holdings = netSpend / price;
+                    cash -= spend;
+                    entryPrice = price;
+
+                    trades.push({
+                        timestamp: candle.timestamp,
+                        type: 'BUY',
+                        price,
+                        amount: holdings,
+                        fee,
+                        reason
+                    });
+                } else if (signal === 'SELL' && holdings > 0) {
+                    const gross = holdings * price;
+                    const fee = gross * feeRate;
+                    const netReturn = gross - fee;
+                    cash += netReturn;
+
+                    trades.push({
+                        timestamp: candle.timestamp,
+                        type: 'SELL',
+                        price,
+                        amount: holdings,
+                        fee,
+                        reason
+                    });
+
+                    holdings = 0;
+                    entryPrice = 0;
+                }
+            }
+
+            // Final Calculations
+            const finalBalance = cash + (holdings * klines[klines.length - 1].close);
+            const totalReturn = ((finalBalance - initialBalance) / initialBalance) * 100;
+            const wins = trades.filter((t, idx) => t.type === 'SELL' && idx > 0 && t.price > trades[idx - 1].price).length;
+            const losses = Math.max(0, Math.floor(trades.length / 2) - wins);
+
+            // 4. Update UI Metrics
+            document.getElementById('metricEquity').textContent = `$${finalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            const retEl = document.getElementById('metricReturn');
+            retEl.textContent = `${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(2)}%`;
+            retEl.className = `text-xl font-bold mt-1 font-mono ${totalReturn >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+            document.getElementById('metricWinLoss').textContent = `${wins}W / ${losses}L`;
+            document.getElementById('metricDrawdown').textContent = `-${maxDrawdown.toFixed(2)}%`;
+            document.getElementById('candleCountBadge').textContent = `${equityCurve.length} Ticks Evaluated`;
+            document.getElementById('tradesCountBadge').textContent = `${trades.length} Trades`;
+
+            // 5. Render SVG Chart
+            renderChart(equityCurve);
+
+            // 6. Render Trade Audit Log
+            renderTradeLog(trades);
+        });
+
+        function renderChart(curve) {
+            if (!curve || curve.length === 0) return;
+            const width = 600;
+            const height = 180;
+            const padding = 10;
+            const equities = curve.map(c => c.equity);
+            const min = Math.min(...equities);
+            const max = Math.max(...equities);
+            const range = max - min || 1;
+
+            const points = curve.map((c, i) => {
+                const x = padding + (i / (curve.length - 1)) * (width - padding * 2);
+                const y = height - padding - ((c.equity - min) / range) * (height - padding * 2);
+                return `${x},${y}`;
+            }).join(' ');
+
+            const isPositive = curve[curve.length - 1].equity >= curve[0].equity;
+            const strokeColor = isPositive ? '#10b981' : '#ef4444';
+
+            document.getElementById('chartContainer').innerHTML = `
+                <svg viewBox="0 0 ${width} ${height}" class="w-full h-44 overflow-visible">
+                    <defs>
+                        <linearGradient id="equityGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.25" />
+                            <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="${padding},${height - padding} ${points} ${width - padding},${height - padding}" fill="url(#equityGrad)" />
+                    <polyline fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
+                </svg>
+            `;
+        }
+
+        function renderTradeLog(trades) {
+            const tbody = document.getElementById('tradeLogBody');
+            if (!trades || trades.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500 font-sans text-xs">No trades were triggered with current strategy settings.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = trades.map(t => `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="p-2.5 text-slate-400">${new Date(t.timestamp).toLocaleDateString()} ${new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                    <td class="p-2.5">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.type === 'BUY' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/50' : 'bg-red-950 text-red-400 border border-red-800/50'}">
+                            ${t.type}
+                        </span>
+                    </td>
+                    <td class="p-2.5 text-slate-200">$${t.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                    <td class="p-2.5 text-slate-300">${t.amount.toFixed(4)}</td>
+                    <td class="p-2.5 text-slate-400">$${t.fee.toFixed(2)}</td>
+                    <td class="p-2.5 text-slate-300">${t.reason}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
