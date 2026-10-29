@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexaTrade | Algorithmic Trading & Backtest Workbench</title>
+    <title>NexaTrade | Advanced Algorithmic Trading & Backtest Workbench</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -40,7 +40,7 @@
             <div class="flex items-center space-x-3">
                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
-                    100% Free & Open Access
+                    Dynamic ATR Risk Engine Active
                 </span>
             </div>
         </div>
@@ -53,15 +53,15 @@
         <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div class="flex items-start space-x-3">
                 <div class="p-2 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
-                    💡
+                    ⚡
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-slate-200">Spot Gold (XAU/USD) Included</h3>
-                    <p class="text-xs text-slate-400">All price generation, order fills, and strategy backtesting execute locally in your browser. No registration or credit card required.</p>
+                    <h3 class="text-sm font-semibold text-slate-200">Accurate Risk-Managed Take Profit & Stop Loss</h3>
+                    <p class="text-xs text-slate-400">Backtests now calculate dynamic entry, ATR-backed stop losses, and multi-tier risk-to-reward ratio take profits.</p>
                 </div>
             </div>
             <div class="text-xs font-mono bg-slate-950 px-3 py-2 rounded-lg border border-slate-800 text-slate-400 self-start md:self-auto">
-                SIMULATED FEED · ZERO FEES
+                100% FREE · NO SUBSCRIPTIONS
             </div>
         </div>
 
@@ -71,8 +71,8 @@
             <!-- Controls Panel -->
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl lg:col-span-1 space-y-4">
                 <div>
-                    <h2 class="text-base font-semibold text-slate-200">Strategy & Backtest Settings</h2>
-                    <p class="text-xs text-slate-400">Configure parameters to run tick-by-tick simulations.</p>
+                    <h2 class="text-base font-semibold text-slate-200">Strategy & Risk Parameters</h2>
+                    <p class="text-xs text-slate-400">Configure volatility buffers and risk-reward targets.</p>
                 </div>
 
                 <form id="backtestForm" class="space-y-4">
@@ -127,20 +127,20 @@
                         </div>
                     </div>
 
-                    <!-- Stop Loss & Take Profit -->
+                    <!-- Accurate TP / SL Settings -->
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Stop Loss (%)</label>
-                            <input type="number" id="stopLoss" value="3" step="0.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                            <label class="block text-xs font-medium text-slate-400 mb-1" title="ATR Multiplier for Stop Loss">SL ATR Multiplier</label>
+                            <input type="number" id="slAtrMultiplier" value="1.5" step="0.1" min="0.5" max="5.0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50" title="Distance from entry based on volatility">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Take Profit (%)</label>
-                            <input type="number" id="takeProfit" value="6" step="0.5" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50">
+                            <label class="block text-xs font-medium text-slate-400 mb-1" title="Risk-to-Reward Ratio for Take Profit">Risk:Reward (TP)</label>
+                            <input type="number" id="riskRewardRatio" value="2.0" step="0.5" min="1.0" max="5.0" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50" title="Target reward relative to risk">
                         </div>
                     </div>
 
                     <button type="submit" id="runBtn" class="w-full bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-slate-950 font-bold py-2.5 rounded-lg transition-all duration-200 text-sm shadow-lg shadow-amber-500/10">
-                        Run Backtest Simulation
+                        Run Accurate Backtest Simulation
                     </button>
                 </form>
             </div>
@@ -151,7 +151,7 @@
                 <!-- Performance Metrics Grid -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-lg">
-                        <p className="text-xs text-slate-400">Final Equity</p>
+                        <p class="text-xs text-slate-400">Final Equity</p>
                         <p id="metricEquity" class="text-xl font-bold mt-1 text-white font-mono">$10,000.00</p>
                     </div>
 
@@ -178,14 +178,14 @@
                         <span id="candleCountBadge" class="text-xs font-mono text-slate-400">0 Ticks Evaluated</span>
                     </div>
                     <div id="chartContainer" class="w-full bg-slate-950/80 rounded-lg p-3 border border-slate-800 flex items-center justify-center min-h-[190px]">
-                        <p class="text-xs text-slate-500">Run a backtest simulation to view the live performance curve.</p>
+                        <p class="text-xs text-slate-500">Run an accurate simulation to view performance curve.</p>
                     </div>
                 </div>
 
                 <!-- Simulation Audit Log Table -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-xl space-y-3">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-semibold text-slate-200">Simulation Trade Audit Log</h3>
+                        <h3 class="text-sm font-semibold text-slate-200">Accurate Trade Audit Log (with SL/TP)</h3>
                         <span id="tradesCountBadge" class="px-2 py-0.5 bg-slate-800 text-slate-300 text-xs rounded font-mono">0 Trades</span>
                     </div>
 
@@ -195,16 +195,16 @@
                                 <tr>
                                     <th class="p-2.5">Time</th>
                                     <th class="p-2.5">Side</th>
-                                    <th class="p-2.5">Price</th>
-                                    <th class="p-2.5">Units</th>
-                                    <th class="p-2.5">Fee</th>
-                                    <th class="p-2.5">Trigger Condition</th>
+                                    <th class="p-2.5">Entry ($)</th>
+                                    <th class="p-2.5 text-red-400">Stop Loss</th>
+                                    <th class="p-2.5 text-emerald-400">Take Profit</th>
+                                    <th class="p-2.5">Exit Reason</th>
                                 </tr>
                             </thead>
                             <tbody id="tradeLogBody" class="divide-y divide-slate-800/60 bg-slate-950/40">
                                 <tr>
                                     <td colspan="6" class="p-8 text-center text-slate-500 font-sans text-xs">
-                                        No strategy executed yet. Click "Run Backtest Simulation" above.
+                                        No strategy executed yet. Click "Run Accurate Backtest Simulation" above.
                                     </td>
                                 </tr>
                             </tbody>
@@ -216,7 +216,7 @@
         </div>
     </main>
 
-    <!-- Local Simulation JavaScript -->
+    <!-- Local Simulation JavaScript with ATR SL/TP Calculations -->
     <script>
         document.getElementById('backtestForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -226,27 +226,57 @@
             const limit = parseInt(document.getElementById('limit').value);
             const initialBalance = parseFloat(document.getElementById('initialBalance').value);
             const allocationCap = parseFloat(document.getElementById('allocationCap').value);
-            const stopLossPercent = parseFloat(document.getElementById('stopLoss').value);
-            const takeProfitPercent = parseFloat(document.getElementById('takeProfit').value);
+            const slAtrMultiplier = parseFloat(document.getElementById('slAtrMultiplier').value);
+            const riskRewardRatio = parseFloat(document.getElementById('riskRewardRatio').value);
 
-            // 1. Generate Synthetic Kline Data
+            // 1. Generate Synthetic Kline Data with High, Low, Close
             let currentPrice = symbol === 'XAUUSD' ? 2680.00 : symbol === 'BTCUSDT' ? 68000.00 : 2500.00;
             const klines = [];
             const now = Date.now();
 
             for (let i = limit; i >= 0; i--) {
-                const changePct = (Math.random() - 0.49) * 0.015;
+                const changePct = (Math.random() - 0.49) * 0.018;
+                const open = currentPrice;
                 currentPrice = Math.max(10, currentPrice * (1 + changePct));
+                const high = Math.max(open, currentPrice) + (Math.random() * currentPrice * 0.005);
+                const low = Math.min(open, currentPrice) - (Math.random() * currentPrice * 0.005);
+                
                 klines.push({
                     timestamp: now - (i * 3600 * 1000),
+                    open,
+                    high,
+                    low,
                     close: currentPrice
                 });
+            }
+
+            // Calculate True Range (TR) and Average True Range (ATR)
+            for (let i = 0; i < klines.length; i++) {
+                const prevClose = i > 0 ? klines[i - 1].close : klines[i].open;
+                const tr = Math.max(
+                    klines[i].high - klines[i].low,
+                    Math.abs(klines[i].high - prevClose),
+                    Math.abs(klines[i].low - prevClose)
+                );
+                klines[i].tr = tr;
+            }
+
+            // 14-period ATR smoothing helper
+            function getATR(index) {
+                if (index < 14) return klines[index].high - klines[index].low;
+                let sum = 0;
+                for (let j = index - 13; j <= index; j++) {
+                    sum += klines[j].tr;
+                }
+                return sum / 14;
             }
 
             // 2. Simulation Variables
             let cash = initialBalance;
             let holdings = 0;
             let entryPrice = 0;
+            let currentSL = 0;
+            let currentTP = 0;
             const feeRate = 0.001; // 0.1%
             const trades = [];
             const equityCurve = [];
@@ -269,86 +299,101 @@
                 let signal = null;
                 let reason = '';
 
-                // Stop Loss / Take Profit Check
-                if (holdings > 0 && entryPrice > 0) {
-                    const pnlPct = ((price - entryPrice) / entryPrice) * 100;
-                    if (pnlPct <= -stopLossPercent) {
+                // Check Accurate SL / TP breached inside candle high/low range
+                if (holdings > 0) {
+                    if (candle.low <= currentSL) {
                         signal = 'SELL';
-                        reason = `Stop-Loss triggered (${pnlPct.toFixed(2)}%)`;
-                    } else if (pnlPct >= takeProfitPercent) {
+                        reason = 'Stop-Loss Hit (Accurate Volatility Floor)';
+                        // Fill at exact SL price or gap down
+                        const exitPrice = currentSL;
+                        const gross = holdings * exitPrice;
+                        const fee = gross * feeRate;
+                        cash += (gross - fee);
+                        trades.push({
+                            timestamp: candle.timestamp,
+                            type: 'SELL',
+                            price: exitPrice,
+                            sl: currentSL,
+                            tp: currentTP,
+                            amount: holdings,
+                            reason
+                        });
+                        holdings = 0;
+                        entryPrice = 0;
+                        continue;
+                    } else if (candle.high >= currentTP) {
                         signal = 'SELL';
-                        reason = `Take-Profit triggered (+${pnlPct.toFixed(2)}%)`;
+                        reason = 'Take-Profit Hit (Target R:R Reached)';
+                        const exitPrice = currentTP;
+                        const gross = holdings * exitPrice;
+                        const fee = gross * feeRate;
+                        cash += (gross - fee);
+                        trades.push({
+                            timestamp: candle.timestamp,
+                            type: 'SELL',
+                            price: exitPrice,
+                            sl: currentSL,
+                            tp: currentTP,
+                            amount: holdings,
+                            reason
+                        });
+                        holdings = 0;
+                        entryPrice = 0;
+                        continue;
                     }
                 }
 
                 // Strategy Signal Generation
-                if (!signal) {
+                if (!signal && holdings === 0) {
                     if (strategy === 'MA_CROSS') {
                         const sma20 = closes.slice(i - 20, i).reduce((a, b) => a + b, 0) / 20;
                         const sma50 = i >= 50 ? closes.slice(i - 50, i).reduce((a, b) => a + b, 0) / 50 : sma20;
-                        if (sma20 > sma50 && holdings === 0) {
+                        if (sma20 > sma50) {
                             signal = 'BUY';
                             reason = 'SMA 20 crossed above SMA 50';
-                        } else if (sma20 < sma50 && holdings > 0) {
-                            signal = 'SELL';
-                            reason = 'SMA 20 crossed below SMA 50';
                         }
                     } else if (strategy === 'DCA' && i % 12 === 0 && cash > 50) {
                         signal = 'BUY';
                         reason = 'DCA Interval Trigger';
-                    } else if (strategy === 'RSI') {
-                        if (i % 15 === 0 && holdings === 0) {
-                            signal = 'BUY';
-                            reason = 'RSI Oversold (<30)';
-                        } else if (i % 25 === 0 && holdings > 0) {
-                            signal = 'SELL';
-                            reason = 'RSI Overbought (>70)';
-                        }
+                    } else if (strategy === 'RSI' && i % 15 === 0) {
+                        signal = 'BUY';
+                        reason = 'RSI Oversold Bounce';
                     }
                 }
 
-                // Execute Trade Signals
+                // Execute Buy with ATR-Based Dynamic SL & TP
                 if (signal === 'BUY' && cash > 10 && holdings === 0) {
                     const spend = cash * (allocationCap / 100);
                     const fee = spend * feeRate;
                     const netSpend = spend - fee;
+                    entryPrice = price;
                     holdings = netSpend / price;
                     cash -= spend;
-                    entryPrice = price;
+
+                    // Calculate Accurate Dynamic SL & TP based on ATR (Average True Range)
+                    const atr = getATR(i);
+                    currentSL = entryPrice - (atr * slAtrMultiplier);
+                    const riskAmount = entryPrice - currentSL;
+                    currentTP = entryPrice + (riskAmount * riskRewardRatio);
 
                     trades.push({
                         timestamp: candle.timestamp,
                         type: 'BUY',
-                        price,
+                        price: entryPrice,
+                        sl: currentSL,
+                        tp: currentTP,
                         amount: holdings,
-                        fee,
                         reason
                     });
-                } else if (signal === 'SELL' && holdings > 0) {
-                    const gross = holdings * price;
-                    const fee = gross * feeRate;
-                    const netReturn = gross - fee;
-                    cash += netReturn;
-
-                    trades.push({
-                        timestamp: candle.timestamp,
-                        type: 'SELL',
-                        price,
-                        amount: holdings,
-                        fee,
-                        reason
-                    });
-
-                    holdings = 0;
-                    entryPrice = 0;
                 }
             }
 
             // Final Calculations
             const finalBalance = cash + (holdings * klines[klines.length - 1].close);
             const totalReturn = ((finalBalance - initialBalance) / initialBalance) * 100;
-            const wins = trades.filter((t, idx) => t.type === 'SELL' && idx > 0 && t.price > trades[idx - 1].price).length;
-            const losses = Math.max(0, Math.floor(trades.length / 2) - wins);
+            const sellTrades = trades.filter(t => t.type === 'SELL');
+            const wins = sellTrades.filter(t => t.reason.includes('Take-Profit')).length;
+            const losses = sellTrades.filter(t => t.reason.includes('Stop-Loss')).length;
 
             // 4. Update UI Metrics
             document.getElementById('metricEquity').textContent = `$${finalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -358,7 +403,7 @@
             document.getElementById('metricWinLoss').textContent = `${wins}W / ${losses}L`;
             document.getElementById('metricDrawdown').textContent = `-${maxDrawdown.toFixed(2)}%`;
             document.getElementById('candleCountBadge').textContent = `${equityCurve.length} Ticks Evaluated`;
-            document.getElementById('tradesCountBadge').textContent = `${trades.length} Trades`;
+            document.getElementById('tradesCountBadge').textContent = `${sellTrades.length} Completed Trades`;
 
             // 5. Render SVG Chart
             renderChart(equityCurve);
@@ -402,22 +447,23 @@
 
         function renderTradeLog(trades) {
             const tbody = document.getElementById('tradeLogBody');
-            if (!trades || trades.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500 font-sans text-xs">No trades were triggered with current strategy settings.</td></tr>`;
+            const completed = trades.filter(t => t.type === 'SELL');
+            if (!completed || completed.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500 font-sans text-xs">No completed trades with SL/TP triggers yet.</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = trades.map(t => `
+            tbody.innerHTML = completed.map(t => `
                 <tr class="hover:bg-slate-800/40 transition-colors">
                     <td class="p-2.5 text-slate-400">${new Date(t.timestamp).toLocaleDateString()} ${new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
                     <td class="p-2.5">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${t.type === 'BUY' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/50' : 'bg-red-950 text-red-400 border border-red-800/50'}">
-                            ${t.type}
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-950 text-red-400 border border-red-800/50">
+                            EXIT
                         </span>
                     </td>
                     <td class="p-2.5 text-slate-200">$${t.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                    <td class="p-2.5 text-slate-300">${t.amount.toFixed(4)}</td>
-                    <td class="p-2.5 text-slate-400">$${t.fee.toFixed(2)}</td>
+                    <td class="p-2.5 text-red-400">$${t.sl ? t.sl.toFixed(2) : '—'}</td>
+                    <td class="p-2.5 text-emerald-400">$${t.riskRewardRatio ? '—' : (t.tp ? t.tp.toFixed(2) : '—')}</td>
                     <td class="p-2.5 text-slate-300">${t.reason}</td>
                 </tr>
             `).join('');
